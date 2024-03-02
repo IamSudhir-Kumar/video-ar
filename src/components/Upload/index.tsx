@@ -1,91 +1,36 @@
 import React, { ChangeEvent, useState } from "react";
 import styles from "./Upload.module.scss";
 import Button from "../common/Button/Button";
-// import { fileUpload } from "@/API/FileUpload";
-// import CommonProgress from "../common/Progress";
-// import { addFolder } from "@/API/Firestore";
-import { useFetchSession } from "@/hooks/useSession";
+import { fileUpload } from "@/API/FileUpload";
+export default function Upload() {
+  const [isFileVisible, setIsFileVisible] = useState<boolean>(false);
+  const [file, setFile] = useState<File | null>(null);
 
-export default function UploadFiles{
-  let { session } = useFetchSession();
-
-  const [isFileVisible, setFileVisible] = useState(false);
-  const [progress, setProgress] = useState(0);
-  const [isFolderVisible, setFolderVisible] = useState(false);
-  const [folderName, setFolderName] = useState("");
   const uploadFile = async (event: ChangeEvent<HTMLInputElement>) => {
-    let file = event.target.files?.[0];
-    fileUpload(
-      file,
-      setProgress,
-      parentId,
-      session?.user.email as string,
-      ownerEmail
-    );
+    const files = event.target.files; // Access files directly from event.target
+    if (files && files.length > 0) {
+      // Check if files exist and are not empty
+      let selectedFile = event.target.files?.[0]; // Get the first file
+      fileUpload(selectedFile); // Call the fileUpload function
+    }
   };
 
-  const uploadFolder = () => {
-    let payload = {
-      folderName: folderName,
-      isFolder: true,
-      parentId: parentId || "",
-      userEmail: session?.user.email,
-      sharedTo: ownerEmail ? [ownerEmail] : [],
-    };
-
-    addFolder(payload);
-    setFolderName("");
-  };
   return (
     <div className={styles.uploadMain}>
       <Button
-        onClick={() => {
-          setFileVisible(!isFileVisible);
-          setFolderVisible(false);
-        }}
-        title="Add a File"
-        btnClass="btn-success"
+        tittle="Upload a file"
+        btnClass="btn-primary"
+        onClick={() => setIsFileVisible(!isFileVisible)}
       />
-      {isFileVisible ? (
+
+      {isFileVisible && (
         <input
-          onChange={(event) => uploadFile(event)}
           type="file"
+          onChange={uploadFile} // Use onChange event
           className="file-input w-full max-w-xs"
         />
-      ) : (
-        <></>
       )}
-      <Button
-        onClick={() => {
-          setFileVisible(false);
-          setFolderVisible(!isFolderVisible);
-        }}
-        title="Add a Folder"
-        btnClass="btn-success"
-      />
-      {isFolderVisible ? (
-        <>
-          <input
-            type="text"
-            placeholder="Type here"
-            value={folderName}
-            onChange={(event) => setFolderName(event.target.value)}
-            className="input input-bordered input-accent w-full max-w-xs"
-          />
-          <Button
-            onClick={uploadFolder}
-            title="Create"
-            btnClass="btn-success"
-          />
-        </>
-      ) : (
-        <></>
-      )}
-      {progress === 0 || progress === 100 ? (
-        <></>
-      ) : (
-        <CommonProgress progress={progress} />
-      )}
+      <Button tittle="Add a folder" btnClass="btn-success" />
     </div>
   );
 }

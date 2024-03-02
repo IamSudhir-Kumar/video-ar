@@ -1,7 +1,16 @@
-import React from 'react'
-import style from "./Button.module.scss"
-export default function Button({btnClass, tittle, onClick} : Button) {
-    return (
-        <button onClick={onClick} className={`btn ${btnClass} ${style.commonBtn}`}>{tittle}</button>
-    )
+import React from 'react';
+import styles from "./Button.module.scss";
+
+interface ButtonProps {
+  btnClass: string;
+  tittle: string;
+  onClick?: () => void;
 }
+
+const Button: React.FC<ButtonProps> = ({ btnClass, tittle, onClick }) => {
+    return (
+        <button onClick={onClick} className={`btn ${btnClass} ${styles.commonBtn}`}>{tittle}</button>
+    );
+}
+
+export default Button;
