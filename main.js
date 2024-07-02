@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     try {
       const mindarThree = new window.MINDAR.IMAGE.MindARThree({
         container: document.body,
-        imageTargetSrc: './new.mind',
+        imageTargetSrc: './targets.mind',
       });
       const { renderer, scene, camera } = mindarThree;
 
@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const markerHeight = 0.56; // Example marker height (adjust based on aspect ratio)
 
       // Create video mesh for the video
-      const { video, mesh: videoMesh } = createVideoMesh('./Delhi.mp4', markerWidth, markerHeight); // Replace with your video file
+      const { video, mesh: videoMesh } = createVideoMesh('./video.mp4', markerWidth, markerHeight); // Replace with your video file
 
       const videoAnchor = mindarThree.addAnchor(0); // Use the correct anchor index
       videoAnchor.group.add(videoMesh);
